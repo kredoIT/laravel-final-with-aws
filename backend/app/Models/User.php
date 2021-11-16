@@ -116,11 +116,7 @@ class User extends Authenticatable
      */
     public static function showAvatar($image)
     {
-        return config('app.env') === 'local'
-                ? asset('/storage/avatars/' . $image) 
-                : Storage::disk('s3')->temporaryUrl(
-                    self::S3_AVATAR_FOLDER . $image,
-                    now()->addMinutes(10)
-                );
+        $imgPath = self::S3_AVATAR_FOLDER . $image;
+        return Storage::disk('s3')->temporaryUrl($imgPath, now()->addMinutes(10));
     }
 }

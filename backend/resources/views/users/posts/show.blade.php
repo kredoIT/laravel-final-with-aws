@@ -12,7 +12,15 @@
 	<div class="col-6 pt-3 ps-3 pe-3">
 		<div class="row mb-2">
 			<div class="col-md-1">
-			<i class="far fa-user-circle text-muted" style="font-size: 2.4rem; "></i>	
+				@if ($post->user->avatar)
+					<img 
+		            	src="{{ App\Models\User::showAvatar($post->user->avatar) }}" 
+		            	class="rounded border border-1 rounded-circle" 
+						style="height: 2.4rem; width: 2.4rem; "
+		            /> 
+				@else
+					<i class="far fa-user-circle text-muted" style="font-size: 2.4rem; "></i>
+				@endif
 			</div>
 			<div class="col-md-10 mb-1">
 				<strong>{{ $post->user->name }}</strong> &nbsp; <span class="fw-light">{{ $post->description }}</span>

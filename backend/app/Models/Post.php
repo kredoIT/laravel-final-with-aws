@@ -69,11 +69,7 @@ class Post extends Model
      */
     public static function showImage($image)
     {
-        return config('app.env') === 'local'
-                ? asset('/storage/images/' . $image) 
-                : Storage::disk('s3')->temporaryUrl(
-                    self::S3_IMAGES_FOLDER . $image,
-                    now()->addMinutes(10)
-                );
+        $imgPath = self::S3_IMAGES_FOLDER . $image;
+        return Storage::disk('s3')->temporaryUrl($imgPath, now()->addMinutes(10));
     }
 }
