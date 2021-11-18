@@ -104,9 +104,6 @@ class ProfileController extends Controller
         $name   = time() . '.' . $request->avatar->extension();
         # put into public to be accessible
         $request->avatar->storeAs(self::S3_AVATAR_FOLDER, $name, 's3');
-        
-        # check if has existing avatar saved in db && in storage
-        if ($avatar) { $this->deleteAvatar($avatar); }
 
         return $name;
     }

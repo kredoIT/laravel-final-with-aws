@@ -34,9 +34,11 @@
 		        </div>
 		        @endforeach
 			</div>
+	        @if (Auth::user()->id === $post->user->id)
 	        <div class="col-2 text-end">
 	    		<a href="{{ route('post.edit', $post->id) }}">Edit</a>
 	    	</div>
+	        @endif
 		</div>
 
 		<div class="mb-3">

@@ -154,7 +154,7 @@ class PostController extends Controller
 
 		$this->categoryPost->insert($categories);
 
-		return redirect()->route('index');
+		return redirect()->route('post.show', $id);
 	}
 
 	/**
@@ -183,8 +183,6 @@ class PostController extends Controller
      */
 	public function delete($id)
 	{
-		$this->deletePostImage($id);
-
 		$this->post->findOrFail($id)->delete();
 
 		return redirect()->route('index');
@@ -203,9 +201,6 @@ class PostController extends Controller
         $name 	= time() . '.' . $request->image->extension();
 
         $request->image->storeAs(self::S3_IMAGES_FOLDER, $name, 's3');
-
-        # delete if there's any existing image to be overwritten
-        if ($postId) { $this->deletePostImage($postId); }
 
         return $name;
     }
