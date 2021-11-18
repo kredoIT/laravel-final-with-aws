@@ -39,6 +39,14 @@
 	</div>
 
 	<div class="mb-3">
+		<img src="{{ App\Models\Post::showImage($post->image) }}" class="card-img"/>
+
+		@error('image')
+			<p class="text-danger">{{ $message }}</p>
+		@enderror
+	</div>
+
+	<div class="mb-3">
 		<input name="image" type="file" class="form-control" />
 
 		@error('image')

@@ -26,12 +26,17 @@
 				<strong>{{ $post->user->name }}</strong> &nbsp; <span class="fw-light">{{ $post->description }}</span>
 			</div>
 		</div>
-		<div class="mb-5">
-			@foreach($post->categoryPost as $categoryPost)
-	        <div class="badge bg-secondary text-wrap" style="width: 6;">
-	            {{ $categoryPost->category->name }}
-	        </div>
-	        @endforeach
+		<div class="row mb-5">
+			<div class="col-10">
+				@foreach($post->categoryPost as $categoryPost)
+		        <div class="badge bg-secondary text-wrap" style="width: 6;">
+		            {{ $categoryPost->category->name }}
+		        </div>
+		        @endforeach
+			</div>
+	        <div class="col-2 text-end">
+	    		<a href="{{ route('post.edit', $post->id) }}">Edit</a>
+	    	</div>
 		</div>
 
 		<div class="mb-3">
