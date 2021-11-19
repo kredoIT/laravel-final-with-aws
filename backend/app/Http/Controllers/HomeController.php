@@ -44,13 +44,13 @@ class HomeController extends Controller
     {
         $search         = $request->input('search') ?? null;
         $suggestedUsers = $this->user->getSuggestedUsers(Auth::user()->id);
-        $model          = $this->post->select('posts.*');
+        $postModel      = $this->post->select('posts.*');
 
         if ($search) {
-            $model->where('description', 'like', '%' . $search . '%');
+            $postModel->where('description', 'like', '%' . $search . '%');
         }
 
-        $posts = $model->latest()->get();
+        $posts = $postModel->latest()->get();
 
         return view('users.home')
                 ->with('posts', $posts)

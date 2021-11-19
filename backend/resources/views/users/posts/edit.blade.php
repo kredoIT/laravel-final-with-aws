@@ -17,7 +17,7 @@
 					type="checkbox" 
 					id="{{ $category->name }}" 
 					value="{{ $category->id }}" 
-					{{ in_array($category->id, $categoryPosts) ? 'checked' : '' }}
+					{{ in_array($category->id, $selectedCategories) ? 'checked' : '' }}
 				>
 				<label class="form-check-label" for="{{ $category->name }}"><h6>{{ $category->name }}</h6></label>
 			</div>

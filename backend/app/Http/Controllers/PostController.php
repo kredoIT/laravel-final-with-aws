@@ -101,16 +101,20 @@ class PostController extends Controller
 	public function edit($id)
 	{
 		$post 			= $this->post->findOrFail($id);
-		$categoryPosts 	= $post->categoryPost->toArray();
 		$categories 	= $this->category->get();
+		$selectedCategories = [];
 
+		/**
+		 * Breakdown the Collection of category post
+		 * to suffice the in_array function used in the View
+		 **/
 		foreach($post->categoryPost as $categoryPost) {
-			$categoryPosts[$categoryPost->category_id] = $categoryPost->category_id;
+			$selectedCategories[] = $categoryPost->category_id;
 		}
 
 		return view('users.posts.edit')
 				->with('post', $post)
-				->with('categoryPosts', $categoryPosts)
+				->with('selectedCategories', $selectedCategories)
 				->with('categories', $categories);
 	}
 

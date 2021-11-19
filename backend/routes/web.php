@@ -38,74 +38,54 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::group([
-        'as'			=> 'admin.',
-        'prefix'		=> 'admin',
-        'namespace'		=> 'Admin',
-        'middleware'	=> 'can:admin'
-    ], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'can:admin'], function () {
 
+    Route::get('/', [UsersController::class, 'index'])->name('admin.index');
 
-    Route::get('/', [UsersController::class, 'index'])->name('index');
+    /** [Users] **/
+    Route::patch('/users/{id}/activate', [UsersController::class, 'activate'])->name('admin.users.activate');
+    Route::patch('/users/{id}/deactivate', [UsersController::class, 'deactivate'])->name('admin.users.deactivate');
 
-    Route::group(['prefix' => 'users', 'as' => 'users.'], function() {
-    	Route::get('/{id}/show', [UsersController::class, 'show'])->name('show');
+    /** [Posts] **/
+    Route::get('/posts', [PostsController::class, 'index'])->name('admin.posts.index');
+    Route::patch('/posts/{id}/activate', [PostsController::class, 'activate'])->name('admin.posts.activate');
+    Route::patch('/posts/{id}/deactivate', [PostsController::class, 'deactivate'])->name('admin.posts.deactivate');
 
-    	Route::patch('/{id}/activate', [UsersController::class, 'activate'])->name('activate');
-    	Route::patch('/{id}/deactivate', [UsersController::class, 'deactivate'])->name('deactivate');
-    });
-
-    Route::group(['prefix' => 'posts', 'as' => 'posts.'], function() {
-    	Route::get('/', [PostsController::class, 'index'])->name('index');
-
-    	Route::patch('/{id}/activate', [PostsController::class, 'activate'])->name('activate');
-    	Route::patch('/{id}/deactivate', [PostsController::class, 'deactivate'])->name('deactivate');
-    });
-
-    Route::group(['prefix' => 'categories', 'as' => 'categories.'], function() {
-    	Route::get('/', [CategoriesController::class, 'index'])->name('index');
-
-    	Route::post('/store', [CategoriesController::class, 'store'])->name('store');
-    	Route::patch('/{id}/update', [CategoriesController::class, 'update'])->name('update');
-    	Route::delete('/{id}/destroy', [CategoriesController::class, 'destroy'])->name('destroy');
-    });
+    /** [Categories] **/
+    Route::get('/categories', [CategoriesController::class, 'index'])->name('admin.categories.index');
+	Route::post('/categories/store', [CategoriesController::class, 'store'])->name('admin.categories.store');
+	Route::patch('/categories/{id}/update', [CategoriesController::class, 'update'])->name('admin.categories.update');
+	Route::delete('/categories/{id}/destroy', [CategoriesController::class, 'destroy'])->name('admin.categories.destroy');
 });
 
 Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/', [HomeController::class, 'index'])->name('index');
 
-	Route::group(['prefix' => 'post', 'as' => 'post.'], function() {
+	/** [Post] **/
+	Route::get('/post/create', [PostController::class, 'create'])->name('post.create');
+	Route::post('/post/store', [PostController::class, 'store'])->name('post.store');
 
-		Route::get('/create', [PostController::class, 'create'])->name('create');
-		Route::post('/store', [PostController::class, 'store'])->name('store');
+	Route::get('/post/{id}/edit', [PostController::class, 'edit'])->name('post.edit');
+	Route::patch('/post/{id}/update', [PostController::class, 'update'])->name('post.update');
 
-		Route::get('/{id}/edit', [PostController::class, 'edit'])->name('edit');
-		Route::patch('/{id}/update', [PostController::class, 'update'])->name('update');
+	Route::delete('/post/{id}/delete', [PostController::class, 'delete'])->name('post.delete');
 
-		Route::delete('/{id}/delete', [PostController::class, 'delete'])->name('delete');
+	Route::get('/post/{id}/show', [PostController::class, 'show'])->name('post.show');
 
-		Route::get('/{id}/show', [PostController::class, 'show'])->name('show');
+	/** [Profile] **/
+	Route::get('/profile/{id}/show', [ProfileController::class, 'show'])->name('profile.show');
+	Route::get('/profile/{id}/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+	Route::patch('/profile/{id}/update', [ProfileController::class, 'update'])->name('profile.update');
 
-	});
+	/** [Follow] **/
+	Route::post('/follow/{id}/store', [FollowController::class, 'store'])->name('follow.store');
+	Route::delete('/follow/{id}/destroy', [FollowController::class, 'destroy'])->name('follow.destroy');
 
-	Route::group(['prefix' => 'profile', 'as' => 'profile.'], function() {
-		Route::get('/{id}/show', [ProfileController::class, 'show'])->name('show');
-		Route::get('/{id}/edit', [ProfileController::class, 'edit'])->name('edit');
-		Route::patch('/{id}/update', [ProfileController::class, 'update'])->name('update');
-	});
+	/** [Like] **/
+	Route::post('/like/{id}/store', [LikeController::class, 'store'])->name('like.store');
+	Route::delete('/like/{id}/destroy', [LikeController::class, 'destroy'])->name('like.destroy');
 
-	Route::group(['prefix' => 'follow', 'as' => 'follow.'], function() {
-		Route::post('/{id}/store', [FollowController::class, 'store'])->name('store');
-		Route::delete('/{id}/destroy', [FollowController::class, 'destroy'])->name('destroy');
-	});
-
-	Route::group(['prefix' => 'like', 'as' => 'like.'], function() {
-		Route::post('/{id}/store', [LikeController::class, 'store'])->name('store');
-		Route::delete('/{id}/destroy', [LikeController::class, 'destroy'])->name('destroy');
-	});
-
-	Route::group(['prefix' => 'comment', 'as' => 'comment.'], function() {
-		Route::post('/{id}/store', [CommentController::class, 'store'])->name('store');
-	});
+	/** [Comment] **/
+	Route::post('/comment/{id}/store', [CommentController::class, 'store'])->name('comment.store');
 });

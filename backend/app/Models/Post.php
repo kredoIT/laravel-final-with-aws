@@ -38,7 +38,7 @@ class Post extends Model
     }
 
     /**
-     * Get the list of category posts of the post
+     * Get the list of selected categories for the related post
      * 
      **/
     public function categoryPost() {
