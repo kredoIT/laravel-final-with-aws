@@ -141,7 +141,6 @@ class PostController extends Controller
 		$post->description 	= $request->description;
 
 		if ($request->image) {
-			$this->deletePostImage($id);
 			$post->image = $this->saveImage($request);
 		}
 
@@ -202,7 +201,7 @@ class PostController extends Controller
     private function saveImage($request, $postId = null)
     {
         # rename the image to remove the risk of overwriting 
-        $name 	= time() . '.' . $request->image->extension();
+        $name = time() . '.' . $request->image->extension();
 
         $request->image->storeAs(self::S3_IMAGES_FOLDER, $name, 's3');
 
@@ -220,7 +219,7 @@ class PostController extends Controller
         $postImage = $this->post->where('id', $postId)->pluck('image')->first();
 
         if ($postImage) {
-        	$imgPath = elf::S3_IMAGES_FOLDER . $postImage;
+        	$imgPath = self::S3_IMAGES_FOLDER . $postImage;
 
             if (Storage::disk('s3')->exists($imgPath)) {
                 Storage::disk('s3')->delete($imgPath);
